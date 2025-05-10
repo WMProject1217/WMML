@@ -1,2 +1,2 @@
 # WMML
-WMML Minecraft Launcher
+WMML Minecraft Launcher with VB6
