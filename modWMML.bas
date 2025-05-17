@@ -35,12 +35,17 @@ Public Sub LaunchMinecraft(mcPath As String, versionName As String, playerName A
     
     ' 构建Java命令
     Dim javaCommand As String
+    Dim configlx As String
+    configlx = ""
+    If Form1.Check1.Value = 0 Then
+        configlx = "-Xmx" & Int(Val(Form1.Text3.Text)) & "M -Xms" & Int(Val(Form1.Text3.Text)) & "M "
+    End If
     Dim conststr As String
-    conststr = "-Dfile.encoding=GB18030 -Dsun.stdout.encoding=GB18030 -Dsun.stderr.encoding=GB18030 -Djava.rmi.server.useCodebaseOnly=true -Dcom.sun.jndi.rmi.object.trustURLCodebase=false -Dcom.sun.jndi.cosnaming.object.trustURLCodebase=false -Dlog4j2.formatMsgNoLookups=true -Dlog4j.configurationFile=.minecraft\versions\" & versionName & "\log4j2.xml "
+    conststr = configlx & "-Dfile.encoding=GB18030 -Dsun.stdout.encoding=GB18030 -Dsun.stderr.encoding=GB18030 -Djava.rmi.server.useCodebaseOnly=true -Dcom.sun.jndi.rmi.object.trustURLCodebase=false -Dcom.sun.jndi.cosnaming.object.trustURLCodebase=false -Dlog4j2.formatMsgNoLookups=true -Dlog4j.configurationFile=.minecraft\versions\" & versionName & "\log4j2.xml "
     conststr = conststr & "-Dminecraft.client.jar=.minecraft\versions\" & versionName & "\" & versionName & ".jar -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -XX:-DontCompileHugeMethods -Dfml.ignoreInvalidMinecraftCertificates=true "
     conststr = conststr & "-Dfml.ignorePatchDiscrepancies=true -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Djava.library.path=.minecraft\versions\" & versionName & "\natives-windows-x86_64 "
     conststr = conststr & "-Djna.tmpdir=.minecraft\versions\" & versionName & "\natives-windows-x86_64 -Dorg.lwjgl.system.SharedLibraryExtractPath=.minecraft\versions\" & versionName & "\natives-windows-x86_64 -Dio.netty.native.workdir=.minecraft\versions\" & versionName & "\natives-windows-x86_64 -Dminecraft.launcher.brand=WMML -Dminecraft.launcher.version=" & App.Major & "." & App.Minor & "." & App.Revision
-    javaCommand = "cmd /K java " & conststr & " -cp """ & libraries & """ " & mainClass & " " & gameArgs
+    javaCommand = "cmd /K " & Form1.Text2.Text & " " & conststr & " -cp """ & libraries & """ " & mainClass & " " & gameArgs
     
     ' 执行命令
     Form1.Text1.Text = javaCommand
@@ -167,7 +172,7 @@ Private Function GetLibraryPath(mcPath As String, lib As Variant) As String
     Dim parts As Variant
     Dim artifactPath As String
     Dim nativePath As String
-    Dim i As Integer
+    Dim I As Integer
     
     ' 解析库名称
     parts = Split(lib("name"), ":")
